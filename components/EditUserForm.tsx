@@ -34,14 +34,15 @@ const EditUserForm: React.FC<EditUserFormProps> = ({ userId }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-
   useEffect(() => {
     setLoading(true);
     fetchUserById(userId)
       .then((user) => {
-        setValue("name", user.name);
-        setValue("email", user.email);
-        setValue("role", user.role);
+        if (user) {
+          setValue("name", user.name);
+          setValue("email", user.email);
+          setValue("role", user.role);
+        }
       })
       .catch(() => {
         setError("ユーザー情報の取得に失敗しました。");
