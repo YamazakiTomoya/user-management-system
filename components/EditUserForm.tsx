@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { fetchUserById, updateUser } from "../utils/api";
 import { useRouter } from "next/navigation";
+import { User } from "@supabase/supabase-js";
 
 interface EditUserFormProps {
   userId: number;
