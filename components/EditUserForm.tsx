@@ -23,7 +23,11 @@ interface EditUserFormInputs {
   role: string;
 }
 
-const EditUserForm: React.FC<EditUserFormProps> = ({ userId, onSuccess, onError}) => {
+const EditUserForm: React.FC<EditUserFormProps> = ({
+  userId,
+  onSuccess,
+  onError,
+}) => {
   const {
     register,
     handleSubmit,
@@ -87,7 +91,13 @@ const EditUserForm: React.FC<EditUserFormProps> = ({ userId, onSuccess, onError}
       <form onSubmit={handleSubmit(onSubmit)}>
         <TextField
           label="名前"
-          {...register("name", { required: "名前は必須です。" })}
+          {...register("name", {
+            required: "名前は必須です。",
+            pattern: {
+              value: /^[\u4E00-\u9FFF\u3040-\u309F\u30A0-\u30FF]+$/,
+              message: "名前は漢字、ひらがな、カタカナのみで入力してください。",
+            },
+          })}
           error={!!errors.name}
           helperText={errors.name?.message}
           fullWidth
@@ -95,7 +105,15 @@ const EditUserForm: React.FC<EditUserFormProps> = ({ userId, onSuccess, onError}
         />
         <TextField
           label="メールアドレス"
-          {...register("email", { required: "メールアドレスは必須です。" })}
+          {...register("email", {
+            required: "メールアドレスは必須です。",
+            pattern: {
+              value:
+                /^[a-zA-Z0-9._%+-]+@(gmail\.com|outlook\.com|outlook\.jp|yahoo\.co\.jp|icloud\.com)$/,
+              message:
+                "有効なメールアドレスを入力してください（例: gmail.com, outlook.com など）。",
+            },
+          })}
           error={!!errors.email}
           helperText={errors.email?.message}
           fullWidth
@@ -103,7 +121,14 @@ const EditUserForm: React.FC<EditUserFormProps> = ({ userId, onSuccess, onError}
         />
         <TextField
           label="役割"
-          {...register("role", { required: "役割は必須です。" })}
+          {...register("role", {
+            required: "役割は必須です。",
+            pattern: {
+              value: /^[\u4E00-\u9FFF\u3040-\u309F\u30A0-\u30FFa-zA-Z\s]+$/,
+              message:
+                "役割は漢字、ひらがな、カタカナ、英語のみで入力してください。",
+            },
+          })}
           error={!!errors.role}
           helperText={errors.role?.message}
           fullWidth
