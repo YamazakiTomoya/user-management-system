@@ -1,9 +1,8 @@
 'use client';
-
 import React, { useEffect, useState } from 'react';
 import { fetchUsers } from '../../utils/api';
 import { User } from '../../types/User';
-import UserCard from '../../components/UserCard';
+import UserList from '../../components/UserList';
 import { Typography, CircularProgress, Alert, Box } from '@mui/material';
 
 const UsersPage: React.FC = () => {
@@ -12,39 +11,43 @@ const UsersPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const getUsers = async () => {
-      try {
-        const data = await fetchUsers();
-        console.log(data);
+    setLoading(true);
+    fetchUsers()
+      .then((data) => {
         setUsers(data);
-      } catch (err) {
+      })
+      .catch((err) => {
         setError('ユーザーの取得に失敗しました。' + err);
-      } finally {
+      })
+      .finally(() => {
         setLoading(false);
-      }
-    };
-
-    getUsers();
+      });
   }, []);
 
   if (loading) {
-    return <CircularProgress />;
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+        <CircularProgress />
+      </Box>
+    );
   }
 
   if (error) {
-    return <Alert severity="error">{error}</Alert>;
+    return (
+      <Box sx={{ mt: 4 }}>
+        <Alert severity="error">{error}</Alert>
+      </Box>
+    );
   }
 
   return (
-    <Box>
+    <Box sx={{ mt: 4 }}>
       <Typography variant="h4" gutterBottom>
         ユーザー一覧
       </Typography>
-      {users.map(user => (
-        <UserCard key={user.id} user={user} />
-      ))}
+      <UserList users={users} />
     </Box>
   );
-}
+};
 
 export default UsersPage;
