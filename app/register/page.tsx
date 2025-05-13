@@ -2,10 +2,14 @@
 import React from "react";
 import RegisterForm from "../../components/RegisterForm";
 import { Typography, Box } from "@mui/material";
+import { useRouter } from "next/navigation";
 
 const RegisterPage: React.FC = () => {
+  const router = useRouter();
+
   const handleSuccess = () => {
     console.log("登録が成功しました！");
+    router.push("/users");
   };
 
   const handleError = (error: any) => {

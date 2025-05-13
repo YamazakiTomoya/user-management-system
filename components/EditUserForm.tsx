@@ -10,11 +10,11 @@ import {
   Alert,
 } from "@mui/material";
 import { fetchUserById, updateUser } from "../utils/api";
-import { useRouter } from "next/navigation";
-import { User } from "@supabase/supabase-js";
 
 interface EditUserFormProps {
   userId: number;
+  onSuccess?: () => void;
+  onError?: (error: any) => void;
 }
 
 interface EditUserFormInputs {
@@ -23,8 +23,7 @@ interface EditUserFormInputs {
   role: string;
 }
 
-const EditUserForm: React.FC<EditUserFormProps> = ({ userId }) => {
-  const router = useRouter();
+const EditUserForm: React.FC<EditUserFormProps> = ({ userId, onSuccess, onError}) => {
   const {
     register,
     handleSubmit,
@@ -56,9 +55,10 @@ const EditUserForm: React.FC<EditUserFormProps> = ({ userId }) => {
     setError(null);
     updateUser(userId, data)
       .then(() => {
-        router.push("/users");
+        if (onSuccess) onSuccess();
       })
       .catch(() => {
+        if (onError) onError(error);
         setError("ユーザー情報の更新に失敗しました。");
       });
   };

@@ -1,7 +1,6 @@
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { TextField, Button, Box, Typography } from "@mui/material";
-import { useRouter } from "next/navigation";
 import { createUser } from "../utils/api";
 
 interface RegisterFormInputs {
@@ -17,7 +16,6 @@ interface RegisterFormProps {
 }
 
 const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess, onError, disabled }) => {
-  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -28,7 +26,6 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess, onError, disable
     createUser(data)
       .then(() => {
         if (onSuccess) onSuccess();
-        router.push("/users");
       })
       .catch((error) => {
         if (onError) onError(error);
