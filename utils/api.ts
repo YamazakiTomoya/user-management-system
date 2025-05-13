@@ -3,8 +3,9 @@ import { User } from '../types/User';
 
 export const fetchUsers = async (): Promise<User[]> => {
   const { data, error } = await supabase
-    .from<'dev_users', User>('dev_users') // テーブル名と型を2つ指定
-    .select('*');
+    .from<'dev_users', User>('dev_users')
+    .select('*')
+    .eq('deleted', false);
 
   if (error) {
     throw error;
@@ -20,7 +21,7 @@ export const fetchUserById = async (id: number): Promise<User | null> => {
     .single();
 
   if (error) {
-    if (error.code === 'PGRST116') { // No rows found
+    if (error.code === 'PGRST116') {
       return null;
     }
     throw error;
@@ -62,6 +63,17 @@ export const deleteUser = async (id: number): Promise<void> => {
   const { error } = await supabase
     .from('dev_users')
     .delete()
+    .eq('id', id);
+
+  if (error) {
+    throw error;
+  }
+};
+
+export const removeUser = async (id: number): Promise<void> => {
+  const { error } = await supabase
+    .from('dev_users')
+    .update({ deleted: true })
     .eq('id', id);
 
   if (error) {
