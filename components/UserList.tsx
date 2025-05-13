@@ -10,13 +10,11 @@ interface UserListProps {
 const UserList: React.FC<UserListProps> = ({ users }) => {
   return (
     <Box sx={{ mt: 4 }}>
-      <Grid container spacing={2}>
-        {users.map((user) => (
-          <Grid item xs={12} sm={6} md={4} key={user.id}>
-            <UserCard user={user} />
-          </Grid>
-        ))}
-      </Grid>
+      {users.map((user) => (
+        <Grid item xs={12} sm={6} md={4} key={user.id}>
+          <UserCard user={user} />
+        </Grid>
+      ))}
     </Box>
   );
 };
