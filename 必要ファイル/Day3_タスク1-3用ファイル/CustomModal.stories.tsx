@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import CustomModal from "./CustomModal";
+import CustomModal from "../../components/parts/CustomModal";
 import CustomButton from "../../components/parts/CustomButton";
 import { Box } from "@mui/material";
 
