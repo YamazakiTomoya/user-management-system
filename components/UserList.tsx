@@ -4,6 +4,7 @@ import CustomCard from "./parts/CustomCard";
 import CustomButton from "./parts/CustomButton";
 import { User } from "../types/User";
 import { removeUser } from "@/utils/api";
+import CustomModal from "./parts/CustomModal";
 
 interface UserListProps {
   users: User[];
@@ -11,9 +12,9 @@ interface UserListProps {
 
 const UserList: React.FC<UserListProps> = ({ users }) => {
   const [userList, setUserList] = useState<User[]>(users);
+  const [open, setOpen] = useState(false);
 
   const handleDelete = (userId: number) => {
-    if (window.confirm("本当にこのユーザーを削除しますか？")) {
       removeUser(userId)
         .then(() => {
           setUserList((prevUsers) =>
@@ -24,9 +25,6 @@ const UserList: React.FC<UserListProps> = ({ users }) => {
           console.error("削除に失敗しました:", error);
           alert("削除に失敗しました。");
         });
-    } else {
-      alert("削除がキャンセルされました。");
-    }
   };
 
   return (
@@ -44,15 +42,26 @@ const UserList: React.FC<UserListProps> = ({ users }) => {
                 <Button size="small" href={`/users/${user.id}/details`}>
                   詳細
                 </Button>
-                <CustomButton
-                  variantType="danger"
-                  size="small"
-                  onClick={() => {
-                    handleDelete(user.id);
-                  }}
-                >
-                  削除
-                </CustomButton>
+                <Box>
+                  {" "}
+                  <CustomButton
+                    variantType="danger"
+                    size="small"
+                    onClick={() => setOpen(true)}
+                  >
+                    削除
+                  </CustomButton>
+                  <CustomModal
+                    open={open}
+                    title="確認"
+                    content="本当にこの操作を実行しますか？"
+                    onClose={() => setOpen(false)}
+                    onConfirm={() => {
+                      handleDelete(user.id);
+                      setOpen(false);
+                    }}
+                  />
+                </Box>
               </>
             }
           />
