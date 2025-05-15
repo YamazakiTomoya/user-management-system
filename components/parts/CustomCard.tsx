@@ -58,10 +58,15 @@ const CustomCard: React.FC<CustomCardProps> = ({
       onMouseLeave={() => setHoveredIndex(null)}
     >
       <CardContent>
-        <Typography variant="h5" component="div">
+        <Typography variant="h5" component="div" >
           {title}
         </Typography>
-        <Typography variant="body2" color="text.secondary" whiteSpace={"pre-line"}>
+        <Typography
+          variant="body1"
+          color="text.primary"
+          sx={{ fontWeight: 500, fontSize: 16, mt: 1, fontFamily: "Roboto, 'Noto Sans JP', sans-serif" }}
+          whiteSpace={"pre-line"}
+        >
           {description}
         </Typography>
       </CardContent>
