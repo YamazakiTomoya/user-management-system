@@ -3,13 +3,13 @@ import React, { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import {
   TextField,
-  Button,
   Box,
   Typography,
   CircularProgress,
   Alert,
 } from "@mui/material";
 import { fetchUserById, updateUser } from "../utils/api";
+import CustomButton from "./parts/CustomButton";
 
 interface EditUserFormProps {
   userId: number;
@@ -134,15 +134,9 @@ const EditUserForm: React.FC<EditUserFormProps> = ({
           fullWidth
           margin="normal"
         />
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          fullWidth
-          sx={{ mt: 2 }}
-        >
+        <CustomButton type="submit" variantType="primary" fullWidth>
           更新
-        </Button>
+        </CustomButton>
       </form>
     </Box>
   );
