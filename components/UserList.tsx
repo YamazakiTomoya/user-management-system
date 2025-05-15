@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Box, Grid, Stack } from "@mui/material";
+import { CustomCardProvider } from "./parts/CustomCard";
 import CustomCard from "./parts/CustomCard";
 import CustomButton from "./parts/CustomButton";
 import { User } from "../types/User";
@@ -12,7 +13,7 @@ interface UserListProps {
 
 const UserList: React.FC<UserListProps> = ({ users }) => {
   const [userList, setUserList] = useState<User[]>(users);
-  const [open, setOpen] = useState(false);
+  const [openId, setOpenId] = useState<number | null>(null);
 
   const handleDelete = (userId: number) => {
     removeUser(userId)
@@ -29,49 +30,61 @@ const UserList: React.FC<UserListProps> = ({ users }) => {
 
   return (
     <Box sx={{ mt: 4 }}>
-      {userList.map((user) => (
-        <Grid item xs={12} sm={6} md={4} key={user.id}>
-          <CustomCard
-            title={user.name}
-            description={`メール: ${user.email}\n役役: ${user.role}`}
-            actions={
-              <Stack direction="row" spacing={2} justifyContent="center" alignItems="center">
-                <CustomButton
-                  variantType="primary"
-                  size="small"
-                  onClick={() => (window.location.href = `/users/${user.id}/edit`)}
+      <CustomCardProvider>
+        {userList.map((user, idx) => (
+          <Grid item xs={12} sm={6} md={4} key={user.id}>
+            <CustomCard
+              index={idx}
+              title={user.name}
+              description={`メール: ${user.email}\n役割: ${user.role}`}
+              actions={
+                <Stack
+                  direction="row"
+                  spacing={2}
+                  alignItems="center"
+                  sx={{ width: "100%" }}
                 >
-                  編集
-                </CustomButton>
-                <CustomButton
-                  variantType="secondary"
-                  size="small"
-                  onClick={() => (window.location.href = `/users/${user.id}/details`)}
-                >
-                  詳細
-                </CustomButton>
-                <CustomButton
-                  variantType="danger"
-                  size="small"
-                  onClick={() => setOpen(true)}
-                >
-                  削除
-                </CustomButton>
-                <CustomModal
-                  open={open}
-                  title="確認"
-                  content="本当にこの操作を実行しますか？"
-                  onClose={() => setOpen(false)}
-                  onConfirm={() => {
-                    handleDelete(user.id);
-                    setOpen(false);
-                  }}
-                />
-              </Stack>
-            }
-          />
-        </Grid>
-      ))}
+                  <CustomButton
+                    variantType="primary"
+                    size="small"
+                    onClick={() =>
+                      (window.location.href = `/users/${user.id}/edit`)
+                    }
+                  >
+                    編集
+                  </CustomButton>
+                  <CustomButton
+                    variantType="secondary"
+                    size="small"
+                    onClick={() =>
+                      (window.location.href = `/users/${user.id}/details`)
+                    }
+                  >
+                    詳細
+                  </CustomButton>
+                  <CustomButton
+                    variantType="danger"
+                    size="small"
+                    onClick={() => setOpenId(user.id)}
+                  >
+                    削除
+                  </CustomButton>
+                  <CustomModal
+                    open={openId === user.id}
+                    title="確認"
+                    content="本当にこの操作を実行しますか？"
+                    onClose={() => setOpenId(null)}
+                    onConfirm={() => {
+                      handleDelete(user.id);
+                      setOpenId(null);
+                    }}
+                  />
+                </Stack>
+              }
+            />
+          </Grid>
+        ))}
+      </CustomCardProvider>
     </Box>
   );
 };
