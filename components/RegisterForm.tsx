@@ -1,7 +1,8 @@
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { TextField, Button, Box, Typography } from "@mui/material";
+import { TextField, Box, Typography } from "@mui/material";
 import { createUser } from "../utils/api";
+import CustomButton from "./parts/CustomButton";
 
 interface RegisterFormInputs {
   name: string;
@@ -37,7 +38,18 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
   };
 
   return (
-    <Box sx={{ maxWidth: 400, mx: "auto", mt: 4 }}>
+    <Box
+      sx={{
+        maxWidth: 400,
+        mx: "auto",
+        mt: 4,
+        border: "1px solid #ccc",
+        borderRadius: 2,
+        boxShadow: 1,
+        p: 3,
+        bgcolor: "#fff",
+      }}
+    >
       <Typography variant="h5" gutterBottom>
         新規登録
       </Typography>
@@ -90,16 +102,15 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
           margin="normal"
           disabled={disabled}
         />
-        <Button
+        <CustomButton
           type="submit"
-          variant="contained"
-          color="primary"
+          variantType="primary"
           fullWidth
           disabled={disabled}
           sx={{ mt: 2 }}
         >
           登録
-        </Button>
+        </CustomButton>
       </form>
     </Box>
   );
