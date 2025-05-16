@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container } from '@mui/material';
 import Providers from '../components/Providers';
-import Navbar from '../components/Navbar';
+// import Navbar from '../components/Navbar';
 import '../styles/globals.css';
 
 const RootLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -9,7 +9,6 @@ const RootLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     <html lang="ja">
       <body>
         <Providers>
-          <Navbar />
           <Container sx={{ mt: 4 }}>
             {children}
           </Container>
