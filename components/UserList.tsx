@@ -24,14 +24,23 @@ const UserList: React.FC<UserListProps> = ({ users }) => {
   const [openId, setOpenId] = useState<number | null>(null);
   const [selectedId, setSelectedId] = useState<string>("");
   const [selectedRole, setSelectedRole] = useState<string>("");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
   const idOptions = Array.from(new Set(users.map((u) => u.id)));
   const roleOptions = Array.from(new Set(users.map((u) => u.role)));
 
-  const filteredUsers = userList.filter((user) => {
+  let filteredUsers = userList.filter((user) => {
     const idMatch = selectedId ? String(user.id) === selectedId : true;
     const roleMatch = selectedRole ? user.role === selectedRole : true;
     return idMatch && roleMatch;
+  });
+
+  filteredUsers = filteredUsers.sort((a, b) => {
+    if (sortOrder === "asc") {
+      return a.id - b.id;
+    } else {
+      return b.id - a.id;
+    }
   });
 
   const handleDelete = (userId: number) => {
@@ -82,6 +91,19 @@ const UserList: React.FC<UserListProps> = ({ users }) => {
                 {role}
               </MenuItem>
             ))}
+          </Select>
+        </FormControl>
+        <FormControl sx={{ minWidth: 120 }}>
+          <InputLabel id="sort-select-label">ID並び順</InputLabel>
+          <Select
+            labelId="sort-select-label"
+            value={sortOrder}
+            label="ID並び順"
+            onChange={(e) => setSortOrder(e.target.value as "asc" | "desc")}
+            size="small"
+          >
+            <MenuItem value="asc">ID昇順</MenuItem>
+            <MenuItem value="desc">ID降順</MenuItem>
           </Select>
         </FormControl>
       </Stack>
