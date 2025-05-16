@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Box, Grid, Stack } from "@mui/material";
+import {
+  Box,
+  Grid,
+  Stack,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from "@mui/material";
 import { CustomCardProvider } from "./parts/CustomCard";
 import CustomCard from "./parts/CustomCard";
 import CustomButton from "./parts/CustomButton";
@@ -14,6 +22,17 @@ interface UserListProps {
 const UserList: React.FC<UserListProps> = ({ users }) => {
   const [userList, setUserList] = useState<User[]>(users);
   const [openId, setOpenId] = useState<number | null>(null);
+  const [selectedId, setSelectedId] = useState<string>("");
+  const [selectedRole, setSelectedRole] = useState<string>("");
+
+  const idOptions = Array.from(new Set(users.map((u) => u.id)));
+  const roleOptions = Array.from(new Set(users.map((u) => u.role)));
+
+  const filteredUsers = userList.filter((user) => {
+    const idMatch = selectedId ? String(user.id) === selectedId : true;
+    const roleMatch = selectedRole ? user.role === selectedRole : true;
+    return idMatch && roleMatch;
+  });
 
   const handleDelete = (userId: number) => {
     removeUser(userId)
@@ -30,8 +49,44 @@ const UserList: React.FC<UserListProps> = ({ users }) => {
 
   return (
     <Box sx={{ mt: 4 }}>
+      <Stack direction="row" spacing={2} sx={{ mb: 3 }}>
+        <FormControl sx={{ minWidth: 120 }}>
+          <InputLabel id="id-select-label">ID</InputLabel>
+          <Select
+            labelId="id-select-label"
+            value={selectedId}
+            label="ID"
+            onChange={(e) => setSelectedId(e.target.value)}
+            size="small"
+          >
+            <MenuItem value="">すべて</MenuItem>
+            {idOptions.map((id) => (
+              <MenuItem key={id} value={String(id)}>
+                {id}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl sx={{ minWidth: 120 }}>
+          <InputLabel id="role-select-label">役割</InputLabel>
+          <Select
+            labelId="role-select-label"
+            value={selectedRole}
+            label="役割"
+            onChange={(e) => setSelectedRole(e.target.value)}
+            size="small"
+          >
+            <MenuItem value="">すべて</MenuItem>
+            {roleOptions.map((role) => (
+              <MenuItem key={role} value={role}>
+                {role}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Stack>
       <CustomCardProvider>
-        {userList.map((user, idx) => (
+        {filteredUsers.map((user, idx) => (
           <Grid item xs={12} sm={6} md={4} key={user.id}>
             <CustomCard
               index={idx}
